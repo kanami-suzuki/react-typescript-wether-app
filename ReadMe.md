@@ -2,7 +2,7 @@
 - 参考：「はじめてつくるReactアプリ with TypeScript」
 - URL:https://bright-syrniki-e8a66d.netlify.app/
 - OS:Mac
-- 言語:CSS、TypeScript
+- 言語:HTML、CSS、TypeScript
 - FW:React
 - エディタ：VisualStudioCode
 - ツール:Git、GitHub、Vite

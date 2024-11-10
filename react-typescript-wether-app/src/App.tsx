@@ -10,6 +10,7 @@ import { useState } from "react"
 import Title from "./components/title" //title.tsxからTitleを読み込んでいる
 import Form from "./components/form"
 import Result from "./components/result"
+import Loading from "./components/loading"
 
 type ResultsState = {
   country: string
@@ -20,6 +21,7 @@ type ResultsState = {
 }
 
 const App = () => {
+  const [loading, setLoading] = useState<boolean>(false)
   const [city, setCity] = useState<string>("")
   //[]の中は[state(ユーザーが入力した都市名)、stateにデータを書き込んだり操作したりする仕組み]
   //setCityを使うことで、city内のデータを操作することができる
@@ -38,6 +40,7 @@ const App = () => {
 
   const getWether = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     fetch(`https://api.weatherapi.com/v1/current.json?key=320c58e03e324877a7d64924241011&q=${city}&aqi=no`) //APIに呼びかける(コールする)
       .then(res => res.json()) //APIにデータを送った後の処理
       .then(data => {
@@ -48,7 +51,11 @@ const App = () => {
           conditionText: data.current.condition.text,
           icon: data.current.condition.icon
         })
+        setLoading(false)
+        setCity("")
       })
+
+      .catch(() => alert("都市名をローマ字で入力してください"))
   }
   //form.tsxからAPIに都市名(データ)を送る仕組みをつくる
 
@@ -59,8 +66,8 @@ const App = () => {
       ただしコンポーネントのタグは必ず先頭を大文字にすること */}
       <div className="container">
         <Title/>
-        <Form setCity={setCity} getWether={getWether}/>
-        <Result results={results}/>
+        <Form setCity={setCity} getWether={getWether} city={city}/>
+        {loading ? <Loading /> : <Result results={results} />}
       </div>
     </div>
   )
